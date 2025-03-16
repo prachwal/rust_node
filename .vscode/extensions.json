@@ -4,6 +4,15 @@
         "donjayamanne.githistory",
         "eamodio.gitlens",
         "davidanson.vscode-markdownlint",
-        "christian-kohler.npm-intellisense"
+        "christian-kohler.npm-intellisense",
+        "mgmcdermott.vscode-language-babel",
+        "atommaterial.a-file-icon-vscode",
+        "ms-azuretools.vscode-docker",
+        "codezombiech.gitignore",
+        "ms-edgedevtools.vscode-edge-devtools",
+        "esbenp.prettier-vscode",
+        "syler.sass-indented",
+        "dotjoshjohnson.xml",
+        "fill-labs.dependi"
     ]
 }

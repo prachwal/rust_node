@@ -1,0 +1,7 @@
+{
+    "terminal.integrated.defaultProfile.windows": "PowerShell", // Opcjonalne: ustawia ten profil jako domyślny
+    "workbench.iconTheme": "a-file-icon-vscode",
+    "workbench.productIconTheme": "a-file-icon-vscode-product-icon-theme",
+    "workbench.colorTheme": "Default Dark+",
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+}
