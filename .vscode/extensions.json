@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "dbaeumer.vscode-eslint",
+        "donjayamanne.githistory",
+        "eamodio.gitlens",
+        "davidanson.vscode-markdownlint",
+        "christian-kohler.npm-intellisense"
+    ]
+}
