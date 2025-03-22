@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 
-interface TableColumn<T> {
+export interface TableColumn<T> {
   key: keyof T;
   label: string;
   style?: React.CSSProperties;
