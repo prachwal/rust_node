@@ -58,6 +58,9 @@ export default {
     static: {
       directory: path.join('dist'),
     },
+    client: {
+      overlay: false, // Disable error overlay in the browser
+    },    
     compress: true,
     port: 9000,
     proxy: [

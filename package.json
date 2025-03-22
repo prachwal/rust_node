@@ -28,7 +28,7 @@
     "less": "^4.2.2",
     "less-loader": "^12.2.0",
     "mini-css-extract-plugin": "^2.9.2",
-    "sass": "^1.85.1",
+    "sass": "^1.86.0",
     "sass-loader": "^16.0.5",
     "ts-jest": "^29.0.0",
     "ts-loader": "^9.5.2",
