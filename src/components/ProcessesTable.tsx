@@ -2,21 +2,15 @@ import { FC, useState, useEffect } from "react";
 import GenericTable from "./GenericTable";
 import { TableColumn } from "./TableColumn";
 import React from "react";
+import { useProcessContext } from "../context/ProcessContext";
 
 const columns: TableColumn<{ pid: string; command: string }>[] = [
-  {
-    key: "pid" as "pid",
-    label: "PID",
-    style: { fontWeight: "bold" }, // Custom style for the column
-  },
-  {
-    key: "command" as "command",
-    label: "Command",
-    format: (value: string) => <span className="green-text">{value}</span>, // Custom formatting
-  },
+  { key: "pid", label: "PID", className: "bold-column" }, // Custom style for the column
+  { key: "command", label: "Command", className: "green-text" },
 ];
 
 const ProcessesTable: FC = () => {
+  const { selectProcess } = useProcessContext();
   const [data, setData] = useState<{ pid: string; command: string }[]>([]);
   const [error, setError] = useState<string | null>(null);
 
@@ -41,6 +35,7 @@ const ProcessesTable: FC = () => {
       columns={columns}
       caption="Processes Table"
       data={data}
+      onRowClick={(row) => selectProcess(row.pid)} // Use context to select process
     />
   );
 };

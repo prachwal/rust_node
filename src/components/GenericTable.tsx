@@ -4,39 +4,106 @@ interface TableColumn<T> {
   key: keyof T;
   label: string;
   style?: React.CSSProperties;
+  className?: string; // Optional CSS class for column styling
   format?: (value: any) => React.ReactNode;
 }
 
 interface GenericTableProps<T> {
   columns: TableColumn<T>[];
   caption: string;
-  data: T[]; // Data is passed directly
+  data: T[];
+  onRowClick?: (row: T) => void; // Optional callback for row click
+  rowsPerPage?: number; // Optional prop to define rows per page
+  disablePagination?: boolean; // Optional prop to disable pagination
 }
 
-const GenericTable = <T,>({ columns, caption, data }: GenericTableProps<T>) => {
+const GenericTable = <T,>({
+  columns,
+  caption,
+  data,
+  onRowClick,
+  rowsPerPage = 5,
+  disablePagination = false,
+}: GenericTableProps<T>) => {
+  const [currentPage, setCurrentPage] = useState(0);
+  const totalPages = Math.ceil(data.length / rowsPerPage);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages - 1) setCurrentPage(currentPage + 1);
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 0) setCurrentPage(currentPage - 1);
+  };
+
+  const paginatedData = disablePagination
+    ? data
+    : data.slice(currentPage * rowsPerPage, (currentPage + 1) * rowsPerPage);
+
+  const shouldShowPagination = !disablePagination && data.length > rowsPerPage;
+
   return (
     <table className="listening-ports-table">
       <caption>{caption}</caption>
       <thead>
         <tr>
-          {columns.map(column => (
-            <th key={column.key as string} style={column.style}>
+          {columns.map((column) => (
+            <th
+              key={column.key as string}
+              style={column.style}
+              className={column.className} // Apply the CSS class if provided
+            >
               {column.label}
             </th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {data.map((item, index) => (
-          <tr key={index}>
-            {columns.map(column => (
-              <td key={column.key as string} style={column.style}>
+        {paginatedData.map((item, index) => (
+          <tr
+            key={index}
+            onClick={() => onRowClick && onRowClick(item)} // Trigger callback on row click
+            style={{ cursor: onRowClick ? "pointer" : "default" }}
+          >
+            {columns.map((column) => (
+              <td
+                key={column.key as string}
+                style={column.style}
+                className={column.className} // Apply the CSS class if provided
+              >
                 {column.format ? column.format(item[column.key]) : (item[column.key] as unknown as React.ReactNode)}
               </td>
             ))}
           </tr>
         ))}
       </tbody>
+      {shouldShowPagination && (
+        <tfoot>
+          <tr>
+            <td colSpan={columns.length} style={{ textAlign: "center" }}>
+              <button
+                type="button"
+                className="pagination-button"
+                onClick={handlePreviousPage}
+                disabled={currentPage === 0}
+              >
+                Previous
+              </button>
+              <span>
+                Page {currentPage + 1} of {totalPages}
+              </span>
+              <button
+                type="button"
+                className="pagination-button"
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages - 1}
+              >
+                Next
+              </button>
+            </td>
+          </tr>
+        </tfoot>
+      )}
     </table>
   );
 };

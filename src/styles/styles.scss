@@ -43,6 +43,11 @@ div.error-message {
   }
 }
 
+.error-message {
+  color: red;
+  font-weight: bold;
+}
+
 // Additional styles from styles.less and styles.css
 button {
   background-color: $primary-color;
@@ -53,6 +58,25 @@ button {
 
   &:hover {
     background-color: color.scale($primary-color, $lightness: -10%);
+  }
+}
+
+button.pagination-button {
+  width: 85px; // Set fixed width
+  padding: 10px 15px; // Ensure consistent size
+  margin: 0 15px; // Add spacing on the left and right
+  background-color: $primary-color;
+  color: white;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: color.scale($primary-color, $lightness: -10%);
+  }
+
+  &:disabled {
+    background-color: gray;
+    cursor: not-allowed;
   }
 }
 
@@ -85,4 +109,9 @@ button {
 .green-text {
   color: green;
   font-weight: bold;
+}
+
+.bold-column {
+  font-weight: bold;
+  width: 80px;
 }
