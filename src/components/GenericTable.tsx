@@ -7,32 +7,13 @@ interface TableColumn<T> {
   format?: (value: any) => React.ReactNode;
 }
 
-interface ListeningPortsTableProps<T> {
-  url: string;
+interface GenericTableProps<T> {
   columns: TableColumn<T>[];
   caption: string;
+  data: T[]; // Data is passed directly
 }
 
-const ListeningPortsTable = <T,>({ url, columns, caption }: ListeningPortsTableProps<T>) => {
-  const [data, setData] = useState<T[]>([]);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetch(url)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Error fetching data: ${response.statusText}`);
-        }
-        return response.json();
-      })
-      .then(json => setData(json.ports || json.processes || []))
-      .catch(err => setError(err.message));
-  }, [url]);
-
-  if (error) {
-    return <div className="error-message">Error: {error}</div>;
-  }
-
+const GenericTable = <T,>({ columns, caption, data }: GenericTableProps<T>) => {
   return (
     <table className="listening-ports-table">
       <caption>{caption}</caption>
@@ -60,4 +41,4 @@ const ListeningPortsTable = <T,>({ url, columns, caption }: ListeningPortsTableP
   );
 };
 
-export default ListeningPortsTable;
+export default GenericTable;
