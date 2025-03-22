@@ -1,70 +1,56 @@
 import React, { FC, useEffect, useState } from 'react';
-import { fetchJson } from '../api/apiClient';
 
-interface Port {
-  protocol: string;
-  localAddress: string;
-  state: string;
-  [key: string]: any; // Allow additional dynamic fields
+interface TableColumn<T> {
+  key: keyof T;
+  label: string;
+  style?: React.CSSProperties;
+  format?: (value: any) => React.ReactNode;
 }
 
-interface Column {
-  key: string; // The key in the data object
-  label: string; // The column header label
-  format?: (value: any) => React.ReactNode; // Optional formatting function
-  style?: React.CSSProperties; // Optional custom styles for the column
+interface ListeningPortsTableProps<T> {
+  url: string;
+  columns: TableColumn<T>[];
+  caption: string;
 }
 
-interface ListeningPortsTableProps {
-  url: string; // API endpoint
-  columns: Column[]; // Array of column definitions
-  caption?: string; // Optional caption for the table
-}
-
-const ListeningPortsTable: FC<ListeningPortsTableProps> = ({ url, columns, caption }) => {
-  const [ports, setPorts] = useState<Port[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+const ListeningPortsTable = <T,>({ url, columns, caption }: ListeningPortsTableProps<T>) => {
+  const [data, setData] = useState<T[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchPorts = async () => {
-      try {
-        const data = await fetchJson(url);
-        setPorts(data.ports);
-      } catch (error) {
-        setError(error as Error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPorts();
+    fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Error fetching data: ${response.statusText}`);
+        }
+        return response.json();
+      })
+      .then(json => setData(json.ports || json.processes || []))
+      .catch(err => setError(err.message));
   }, [url]);
 
   if (error) {
-    throw error; // Let ErrorBoundary handle the error
+    return <div className="error-message">Error: {error}</div>;
   }
-
-  if (loading) return <div>Loading...</div>;
 
   return (
     <table className="listening-ports-table">
-      {caption && <caption>{caption}</caption>}
+      <caption>{caption}</caption>
       <thead>
         <tr>
-          {columns.map((column) => (
-            <th key={column.key} className={`column-${column.key}`}>
+          {columns.map(column => (
+            <th key={column.key as string} style={column.style}>
               {column.label}
             </th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {ports.map((port, index) => (
+        {data.map((item, index) => (
           <tr key={index}>
-            {columns.map((column) => (
-              <td key={column.key} className={`column-${column.key}`}>
-                {column.format ? column.format(port[column.key]) : port[column.key]}
+            {columns.map(column => (
+              <td key={column.key as string} style={column.style}>
+                {column.format ? column.format(item[column.key]) : (item[column.key] as unknown as React.ReactNode)}
               </td>
             ))}
           </tr>

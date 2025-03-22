@@ -8,6 +8,7 @@ export default {
   output: {
     filename: '[name].[chunkhash].js',
     path: path.resolve('dist'),
+    clean: true, // Clean the output directory before emit
   },
   devtool: 'source-map', // Enable source maps
   resolve: {
@@ -17,7 +18,14 @@ export default {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        use: {
+          loader: 'ts-loader',
+          options: {
+            compilerOptions: {
+              sourceMap: true, // Enable source maps for TypeScript
+            },
+          },
+        },
         exclude: /node_modules/,
       },
       {
