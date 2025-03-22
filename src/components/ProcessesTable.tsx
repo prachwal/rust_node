@@ -10,32 +10,19 @@ const columns: TableColumn<{ pid: string; command: string }>[] = [
 ];
 
 const ProcessesTable: FC = () => {
-  const { selectProcess } = useProcessContext();
-  const [data, setData] = useState<{ pid: string; command: string }[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const { processes, selectProcess } = useProcessContext();
 
-  useEffect(() => {
-    fetch("/api/processes")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Error fetching data: ${response.statusText}`);
-        }
-        return response.json();
-      })
-      .then((json) => setData(json.processes || []))
-      .catch((err) => setError(err.message));
-  }, []);
-
-  if (error) {
-    throw new Error(error);
-  }
+  const handleRowClick = async (pid: string) => {
+    const selectedProcess = await selectProcess(pid); // Fetch process details dynamically
+    console.log("Selected Process:", selectedProcess);
+  };
 
   return (
     <GenericTable<{ pid: string; command: string }>
       columns={columns}
       caption="Processes Table"
-      data={data}
-      onRowClick={(row) => selectProcess(row.pid)} // Use context to select process
+      data={processes}
+      onRowClick={(row) => handleRowClick(row.pid)} // Use context to fetch process details
     />
   );
 };

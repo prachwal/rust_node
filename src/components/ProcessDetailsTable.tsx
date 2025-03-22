@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import GenericTable from "./GenericTable"; // Import GenericTableProps
+import GenericTable from "./GenericTable";
 import { TableColumn } from "./TableColumn";
 import { useProcessContext } from "../context/ProcessContext";
 
@@ -13,7 +13,7 @@ interface ProcessDetails {
 }
 
 const columns: TableColumn<ProcessDetails>[] = [
-  { key: "pid", label: "PID", className: "bold-column" }, // Use the new CSS class
+  { key: "pid", label: "PID", className: "bold-column" },
   { key: "ppid", label: "PPID" },
   { key: "command", label: "Command" },
   { key: "cpu", label: "CPU (%)" },
@@ -22,9 +22,9 @@ const columns: TableColumn<ProcessDetails>[] = [
 ];
 
 const ProcessDetailsTable: FC = () => {
-  const { processDetails, error } = useProcessContext();
+  const { processes, error } = useProcessContext();
 
-  if (!processDetails) {
+  if (!processes.length) {
     return null; // Do not render the component if there is no data
   }
 
@@ -37,8 +37,8 @@ const ProcessDetailsTable: FC = () => {
       <GenericTable<ProcessDetails>
         columns={columns}
         caption="Process Details"
-        data={[processDetails]}
-        disablePagination={true} // Disable pagination for this table
+        data={processes}
+        disablePagination={true}
       />
     </div>
   );

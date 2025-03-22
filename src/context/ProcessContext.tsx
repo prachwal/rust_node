@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, FC } from "react";
+import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
-interface ProcessDetails {
+interface Process {
   pid: string;
   ppid: string;
   command: string;
@@ -10,46 +10,45 @@ interface ProcessDetails {
 }
 
 interface ProcessContextType {
-  selectedPid: string | null;
-  processDetails: ProcessDetails | null;
+  processes: Process[];
   error: string | null;
-  selectProcess: (pid: string) => void;
+  selectProcess: (pid: string) => Promise<Process | undefined>; // Update to return a Promise
 }
 
 const ProcessContext = createContext<ProcessContextType | undefined>(undefined);
 
-export const ProcessProvider: FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const [selectedPid, setSelectedPid] = useState<string | null>(null);
-  const [processDetails, setProcessDetails] = useState<ProcessDetails | null>(
-    null
-  );
+export const ProcessProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [processes, setProcesses] = useState<Process[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  const selectProcess = (pid: string) => {
-    setSelectedPid(pid);
-    fetch(`/api/process/${pid}`)
+  useEffect(() => {
+    fetch("/api/processes")
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Process not found or an error occurred.");
+          throw new Error(`Error fetching data: ${response.statusText}`);
         }
         return response.json();
       })
-      .then((json) => {
-        setProcessDetails(json.process);
-        setError(null);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setProcessDetails(null);
-      });
+      .then((json) => setProcesses(json.processes || []))
+      .catch((err) => setError(err.message));
+  }, []);
+
+  const selectProcess = async (pid: string): Promise<Process | undefined> => {
+    try {
+      const response = await fetch(`/api/process/${pid}`);
+      if (!response.ok) {
+        throw new Error(`Error fetching process details: ${response.statusText}`);
+      }
+      const process = await response.json();
+      return process;
+    } catch (err) {
+      console.error(err);
+      return undefined;
+    }
   };
 
   return (
-    <ProcessContext.Provider
-      value={{ selectedPid, processDetails, error, selectProcess }}
-    >
+    <ProcessContext.Provider value={{ processes, error, selectProcess }}>
       {children}
     </ProcessContext.Provider>
   );
