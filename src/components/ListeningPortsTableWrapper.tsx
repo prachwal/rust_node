@@ -1,7 +1,14 @@
-import React, { useState } from "react";
+import React, { JSX, useState } from "react";
 import { FC, useEffect } from "react";
 import GenericTable from "./GenericTable";
-import { TableColumn } from "./TableColumn";
+
+export interface TableColumn<T> {
+  key: keyof T;
+  label: string;
+  style?: React.CSSProperties;
+  className?: string;
+  format?: (value: any) => JSX.Element;
+}
 
 const columns: TableColumn<{
   protocol: string;

@@ -1,12 +1,7 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import App from './components/App';
-import { ProcessProvider } from './context/ProcessContext';
+import React from "react";
+import { createRoot } from "react-dom/client";
+import App from "./components/App";
 
-const container = document.getElementById('root');
+const container = document.getElementById("root");
 const root = createRoot(container!);
-root.render(
-  <ProcessProvider>
-    <App />
-  </ProcessProvider>
-);
+root.render(<App />);
