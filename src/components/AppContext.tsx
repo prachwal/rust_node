@@ -1,9 +1,8 @@
 // AppContext.tsx
 import React, { createContext, useReducer, ReactNode, useMemo } from "react";
-import { AppState, AppAction, AppContextType } from "../state/types";
+import { AppState, AppContextType } from "../state/types";
 import { initialState, appReducer } from "../state/reducer";
-import { applyMiddleware} from "../state/middleware/middleware";
-import { middlewares } from "../state/middleware";
+import { applyMiddleware, middlewares } from "../state/middleware";
 
 export const AppContext = createContext<AppContextType>({
   state: initialState,

@@ -1,7 +1,5 @@
 import { loggerMiddleware } from "./loggerMiddleware";
 import { asyncMiddleware } from "./asyncMiddleware";
-import { applyMiddleware } from "./middleware";
 
-export { applyMiddleware };
-
+export { applyMiddleware } from "./middleware";
 export const middlewares = [loggerMiddleware, asyncMiddleware];

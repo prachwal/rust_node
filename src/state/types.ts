@@ -11,13 +11,6 @@ export type AppAction =
   | { type: "incrementAsync"; payload: number }
   | { type: "setLoading"; payload: boolean };
 
-export type Next = (action: AppAction) => void;
-
-export type Middleware = (store: {
-  getState: () => AppState;
-  dispatch: React.Dispatch<AppAction>;
-}) => (next: React.Dispatch<AppAction>) => (action: AppAction) => void;
-
 export interface AppContextType {
   state: AppState;
   dispatch: React.Dispatch<AppAction>;
