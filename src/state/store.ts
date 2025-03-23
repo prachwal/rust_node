@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useReducer, useEffect } from "react";
 import { appReducer, initialState } from "./reducer";
 import { applyMiddleware, middlewares } from "./middleware";
 

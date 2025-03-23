@@ -7,7 +7,7 @@ export const ListeningPortsTable: React.FC = () => {
   const { state, dispatch } = useContext(AppContext);
 
   useEffect(() => {
-    dispatch({ type: "fetchListeningPorts" });
+    dispatch({ type: "FETCH_ListeningPorts_REQUEST" });
   }, [dispatch]);
 
   const columns: TableColumn<{ protocol: string; localAddress: string; state: string }>[] = [
@@ -22,6 +22,7 @@ export const ListeningPortsTable: React.FC = () => {
         columns={columns}
         caption="Listening Ports"
         data={state.listeningPorts}
+        tableClassName="listening-ports-table" // Pass the className as a prop
       />
     </ErrorBoundary>
   );

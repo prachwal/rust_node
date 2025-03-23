@@ -13,8 +13,10 @@ interface GenericTableProps<T> {
   caption: string;
   data: T[];
   onRowClick?: (row: T) => void; // Optional callback for row click
+  rowProps?: (row: T) => React.HTMLAttributes<HTMLTableRowElement>; // Added rowProps definition
   rowsPerPage?: number; // Optional prop to define rows per page
   disablePagination?: boolean; // Optional prop to disable pagination
+  tableClassName?: string; // Ensure this property is defined
 }
 
 const GenericTable = <T,>({
@@ -22,8 +24,10 @@ const GenericTable = <T,>({
   caption,
   data,
   onRowClick,
+  rowProps, // Added rowProps to destructuring
   rowsPerPage = 5,
   disablePagination = false,
+  tableClassName = "default-table-class", // Default className if not provided
 }: GenericTableProps<T>) => {
   const [currentPage, setCurrentPage] = useState(0);
   const totalPages = Math.ceil(data.length / rowsPerPage);
@@ -43,7 +47,7 @@ const GenericTable = <T,>({
   const shouldShowPagination = !disablePagination && data.length > rowsPerPage;
 
   return (
-    <table className="listening-ports-table">
+    <table className={tableClassName}>
       <caption>{caption}</caption>
       <thead>
         <tr>
@@ -62,8 +66,12 @@ const GenericTable = <T,>({
         {paginatedData.map((item, index) => (
           <tr
             key={index}
+            {...(rowProps ? rowProps(item) : {})} // Apply rowProps if provided
             onClick={() => onRowClick && onRowClick(item)} // Trigger callback on row click
-            style={{ cursor: onRowClick ? "pointer" : "default" }}
+            style={{
+              cursor: onRowClick ? "pointer" : "default",
+              ...(rowProps ? rowProps(item).style : {}), // Merge styles if rowProps provides them
+            }}
           >
             {columns.map((column) => (
               <td

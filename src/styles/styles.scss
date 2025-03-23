@@ -34,8 +34,12 @@ table.listening-ports-table {
 }
 
 table.listening-ports-table tbody tr:hover {
-  background-color: #f0f0f0;
+  background-color: #f0f0f0; // Hover effect
   cursor: pointer;
+}
+
+table.listening-ports-table tbody tr.active-row {
+  background-color: #f0f8ff; // Highlight color for the active row
 }
 
 div.error-message {

@@ -1,31 +1,41 @@
 import { Middleware, Next } from "./middleware";
 import { AppAction, AppState } from "../types";
+import { fetchAndDispatch } from "../../api/fetchUtils";
 
 export const apiMiddleware: Middleware<AppState, AppAction> =
   (store) => (next: Next<AppAction>) => async (action: AppAction) => {
-    if (action.type === "fetchProcesses") {
-      store.dispatch({ type: "setLoading", payload: true });
-      try {
-        const response = await fetch("/api/processes");
-        const data = await response.json();
-        store.dispatch({ type: "setProcesses", payload: data.processes });
-      } catch (error) {
-        console.error("Failed to fetch processes:", error);
-      } finally {
-        store.dispatch({ type: "setLoading", payload: false });
-      }
-    } else if (action.type === "fetchListeningPorts") {
-      store.dispatch({ type: "setLoading", payload: true });
-      try {
-        const response = await fetch("/api/listening-ports");
-        const data = await response.json();
-        store.dispatch({ type: "setListeningPorts", payload: data.ports });
-      } catch (error) {
-        console.error("Failed to fetch listening ports:", error);
-      } finally {
-        store.dispatch({ type: "setLoading", payload: false });
-      }
-    } else {
-      return next(action);
+    switch (action.type) {
+      case "FETCH_Processes_REQUEST":
+        await fetchAndDispatch(
+          store,
+          "/api/processes",
+          "FETCH_Processes_SUCCESS",
+          "FETCH_Processes_FAILURE",
+        );
+        break;
+
+      case "FETCH_ListeningPorts_REQUEST":
+        await fetchAndDispatch(
+          store,
+          "/api/listening-ports",
+          "FETCH_ListeningPorts_SUCCESS",
+          "FETCH_ListeningPorts_FAILURE",
+        );
+        break;
+
+      case "FETCH_ProcessDetails_REQUEST":
+        await fetchAndDispatch(
+          store,
+          "/api/process/:id",
+          "FETCH_ProcessDetails_SUCCESS",
+          "FETCH_ProcessDetails_FAILURE",
+          {
+            pathParams: { id: action.payload },
+          }
+        );
+        break;
+
+      default:
+        return next(action);
     }
   };
