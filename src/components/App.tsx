@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 import "../styles/styles.scss";
 import React from "react";
 import GenericTable, { type TableColumn } from "./common/GenericTable";
@@ -6,8 +6,11 @@ import ErrorButton from "./ErrorButton";
 import ErrorBoundary from "./common/ErrorBoundary";
 import ErrorFallback from "./ErrorFallback";
 import { Counter } from "./Counter";
+import { AppContext } from "./AppContext";
 
 const App: FC = () => {
+  const { state } = useContext(AppContext);
+
   const tableData = [
     { id: 1, name: "Alice", age: 25 },
     { id: 2, name: "Bob", age: 30 },
@@ -43,6 +46,7 @@ const App: FC = () => {
         onRowClick={(row) => alert(`Row clicked: ${JSON.stringify(row)}`)}
         rowsPerPage={3}
       />
+      {state.loading && <p>Loading...</p>}
     </div>
   );
 };

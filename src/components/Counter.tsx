@@ -9,10 +9,10 @@ export const Counter: React.FC = () => {
     <div>
       <p>Licznik: {state.count}</p>
       <p>{state.loading ? "Ładowanie..." : "Gotowe"}</p>
-      <button type="button" onClick={() => dispatch({ type: "increment" })}>Zwiększ</button>
-      <button type="button"onClick={() => dispatch({ type: "decrement" })}>Zmniejsz</button>
-      <button type="button"onClick={() => dispatch({ type: "reset" })}>Resetuj</button>
-      <button type="button"
+      <button onClick={() => dispatch({ type: "increment" })}>Zwiększ</button>
+      <button onClick={() => dispatch({ type: "decrement" })}>Zmniejsz</button>
+      <button onClick={() => dispatch({ type: "reset" })}>Resetuj</button>
+      <button
         onClick={() => dispatch({ type: "incrementAsync", payload: 5 })}
         disabled={state.loading}
       >
