@@ -1,4 +1,4 @@
-import { useReducer, useEffect } from "react";
+import { useReducer } from "react";
 import { appReducer, initialState } from "./reducer";
 import { applyMiddleware, middlewares } from "./middleware";
 
@@ -11,3 +11,5 @@ export const useStore = () => {
 
   return { state, dispatch: enhancedDispatch };
 };
+
+

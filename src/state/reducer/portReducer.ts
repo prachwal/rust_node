@@ -1,4 +1,5 @@
-import { AppAction, ErrorObject, ListeningPort } from "../types";
+import { ErrorObject, ListeningPort } from "../types";
+import { AppAction } from "../actions";
 
 export interface PortState {
   listeningPorts: ListeningPort[];

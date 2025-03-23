@@ -1,4 +1,4 @@
-import { AppAction } from "../types";
+import { AppAction } from "../actions";
 
 export interface LoadingState {
   loading: boolean;

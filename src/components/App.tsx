@@ -17,7 +17,7 @@ const App: FC = () => {
     <div className="app">
       <h1>Hello, Webpack with TypeScript!</h1>
       <Counter />
-      <ErrorBoundary fallback={ErrorFallback}>
+      {/* <ErrorBoundary fallback={ErrorFallback}>
         <ErrorButton />
       </ErrorBoundary>
       <ErrorBoundary fallback={ErrorFallback}>
@@ -25,7 +25,7 @@ const App: FC = () => {
       </ErrorBoundary>
       <ErrorBoundary fallback={ErrorFallback}>
         <ListeningPortsTable />
-      </ErrorBoundary>
+      </ErrorBoundary> */}
       <ErrorBoundary fallback={ErrorFallback}>
         <ProcessesTable />
       </ErrorBoundary>

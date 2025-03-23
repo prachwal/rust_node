@@ -1,4 +1,5 @@
-import { AppAction, ErrorObject, Process, ProcessDetails } from "../types";
+import { ErrorObject, Process, ProcessDetails } from "../types";
+import { AppAction } from "../actions";
 
 export interface ProcessState {
   processDetails?: ProcessDetails | null; // Add processDetails to the state

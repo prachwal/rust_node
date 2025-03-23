@@ -37,7 +37,7 @@ export const ProcessesTable: React.FC = () => {
           className: row.pid === state.selectedPid ? "active-row" : "",
         })}
       />
-      {state.errorState && (
+      {state.errorState?.message &&  (
         <div className="error-message">
           <strong>Error:</strong> {String(state.errorState.message || state.errorState.Error?.message)}
         </div>

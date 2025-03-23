@@ -1,5 +1,7 @@
-import { Middleware, Next } from "./middleware";
-import { AppAction, AppState } from "../types";
+import { Middleware } from ".";
+import { Next } from ".";
+import { AppState } from "../reducer";
+import { AppAction } from "../actions";
 import { fetchAndDispatch } from "../../api/fetchUtils";
 
 export const apiMiddleware: Middleware<AppState, AppAction> =

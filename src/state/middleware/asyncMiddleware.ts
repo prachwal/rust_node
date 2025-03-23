@@ -1,5 +1,7 @@
-import { AppAction, AppState } from "../types";
-import { Middleware, Next } from "./middleware";
+import { AppState } from "../reducer";
+import { AppAction } from "../actions";
+import { Middleware } from ".";
+import { Next } from ".";
 
 export const asyncMiddleware: Middleware<AppState, AppAction> =
   (store) => (next: Next<AppAction>) => (action: AppAction) => {
