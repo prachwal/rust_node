@@ -5,6 +5,7 @@ import GenericTable, { type TableColumn } from "./common/GenericTable";
 import ErrorButton from "./ErrorButton";
 import ErrorBoundary from "./common/ErrorBoundary";
 import ErrorFallback from "./ErrorFallback";
+import { Counter } from "./Counter";
 
 const App: FC = () => {
   const tableData = [
@@ -31,6 +32,7 @@ const App: FC = () => {
   return (
     <div className="app">
       <h1>Hello, Webpack with TypeScript!</h1>
+      <Counter />
       <ErrorBoundary fallback={ErrorFallback}>
         <ErrorButton />
       </ErrorBoundary>
