@@ -12,6 +12,10 @@ export const appReducer = (state: AppState, action: AppAction): AppState => {
         return { ...state, loading: action.payload };
       case "incrementAsync":
         return { ...state, count: state.count + action.payload };
+      case "setProcesses":
+        return { ...state, processes: action.payload };
+      case "setListeningPorts":
+        return { ...state, listeningPorts: action.payload };
       default:
         return state;
     }

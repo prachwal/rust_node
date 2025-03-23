@@ -7,6 +7,8 @@ import ErrorBoundary from "./common/ErrorBoundary";
 import ErrorFallback from "./ErrorFallback";
 import { Counter } from "./Counter";
 import { AppContext } from "./AppContext";
+import { ProcessesTable } from "./ProcessesTable";
+import { ListeningPortsTable } from "./ListeningPortsTable";
 
 const App: FC = () => {
   const { state } = useContext(AppContext);
@@ -39,6 +41,8 @@ const App: FC = () => {
       <ErrorBoundary fallback={ErrorFallback}>
         <ErrorButton />
       </ErrorBoundary>
+      <ProcessesTable />
+      <ListeningPortsTable />
       <GenericTable
         columns={tableColumns}
         caption="Example Table"
