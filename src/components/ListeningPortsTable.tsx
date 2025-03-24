@@ -16,14 +16,22 @@ export const ListeningPortsTable: React.FC = () => {
     { key: "state", label: "State" },
   ];
 
+  // Check for listening ports payload
+  const portsData = state.listeningPorts?.payload || [];
+
   return (
     <ErrorBoundary>
       <GenericTable
         columns={columns}
         caption="Listening Ports"
-        data={state.listeningPorts || []}
-        tableClassName="listening-ports-table" // Pass the className as a prop
+        data={portsData}
+        tableClassName="listening-ports-table" 
       />
+      {state.listeningPorts?.errorState?.message && (
+        <div className="error-message">
+          <strong>Error:</strong> {state.listeningPorts.errorState.message}
+        </div>
+      )}
     </ErrorBoundary>
   );
 };

@@ -25,30 +25,33 @@ export const ProcessesTable: React.FC = () => {
     { key: "command", label: "Command" },
   ];
 
+  // Check for processes payload
+  const processesData = state.processes?.payload || [];
+
   return (
     <ErrorBoundary>
       <GenericTable
         columns={columns}
         caption="Processes"
-        data={state.processes || []}
+        data={processesData}
         onRowClick={handleRowClick}
         tableClassName="listening-ports-table"
         rowProps={(row) => ({
           className: row.pid === state.selectedPid ? "active-row" : "",
         })}
       />
-      {state.errorState?.message &&  (
+      {(state.processes?.errorState?.message) && (
         <div className="error-message">
-          <strong>Error:</strong> {String(state.errorState.message || state.errorState.Error?.message)}
+          <strong>Error:</strong> {String(state.processes?.errorState?.message)}
         </div>
       )}
-      {state.processDetails && (
+      {state.processDetails?.payload && (
         <div className="process-details">
           <h3>Process Details</h3>
-          <p><strong>PID:</strong> {state.processDetails.pid}</p>
-          <p><strong>Command:</strong> {state.processDetails.command}</p>
-          <p><strong>CPU Usage:</strong> {state.processDetails.cpu}%</p>
-          <p><strong>Memory Usage:</strong> {state.processDetails.memory} MB</p>
+          <p><strong>PID:</strong> {state.processDetails.payload.pid}</p>
+          <p><strong>Command:</strong> {state.processDetails.payload.command}</p>
+          <p><strong>CPU Usage:</strong> {state.processDetails.payload.cpu}%</p>
+          <p><strong>Memory Usage:</strong> {state.processDetails.payload.memory} MB</p>
         </div>
       )}
     </ErrorBoundary>

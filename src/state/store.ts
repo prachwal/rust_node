@@ -2,20 +2,36 @@ import { useReducer } from "react";
 import { appReducer, initialState } from "./reducer";
 import { applyMiddleware, middlewares } from "./middleware";
 
-type Listener = () => void;
+type AppState = typeof initialState;
+
+// Typed listener with selector
+interface Listener<T> {
+  selector: (state: AppState) => T;
+  callback: () => void;
+  prevValue: T;
+}
 
 export const useStore = () => {
   const [state, rawDispatch] = useReducer(appReducer, initialState);
+  
+  // Typed listeners array
+  const listeners: Listener<any>[] = [];
 
   const getState = () => state;
 
-  // Lista subskrybentów
-  const listeners: Listener[] = [];
-
-  // Funkcja do subskrybowania zmian
-  const subscribe = (listener: Listener) => {
+  // Subscribe with selector
+  const subscribe = <T>(
+    selector: (state: AppState) => T,
+    callback: () => void
+  ) => {
+    const listener: Listener<T> = {
+      selector,
+      callback,
+      prevValue: selector(state),
+    };
+    
     listeners.push(listener);
-    // Zwracamy funkcję do anulowania subskrypcji
+    
     return () => {
       const index = listeners.indexOf(listener);
       if (index > -1) {
@@ -24,15 +40,32 @@ export const useStore = () => {
     };
   };
 
-  // Funkcja do powiadamiania subskrybentów
+  // Improved notification logic that properly handles primitives and objects
   const notifyListeners = () => {
-    listeners.forEach((listener) => listener());
+    listeners.forEach((listener) => {
+      const newValue = listener.selector(state);
+      
+      // For primitives and null
+      if (typeof newValue !== 'object' || newValue === null) {
+        if (newValue !== listener.prevValue) {
+          listener.prevValue = newValue;
+          listener.callback();
+        }
+        return;
+      }
+      
+      // For objects, do a deep comparison
+      if (JSON.stringify(newValue) !== JSON.stringify(listener.prevValue)) {
+        // Deep copy to avoid reference issues
+        listener.prevValue = JSON.parse(JSON.stringify(newValue));
+        listener.callback();
+      }
+    });
   };
 
-  // Wzbogacony dispatch, który powiadamia subskrybentów
   const enhancedDispatch = applyMiddleware(middlewares, (action) => {
     rawDispatch(action);
-    notifyListeners(); // Powiadom subskrybentów po każdej akcji
+    notifyListeners();
   }, getState);
 
   return { state, dispatch: enhancedDispatch, subscribe };

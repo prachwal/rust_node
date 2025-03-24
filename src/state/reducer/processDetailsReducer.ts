@@ -1,17 +1,32 @@
-import { ErrorObject, Process, ProcessDetails } from "../types";
+import { ErrorObject, ProcessDetails } from "../types";
 import { AppAction } from "../actions";
 
-export interface ProcessState {
-  processDetails?: ProcessDetails | null; // Add processDetails to the state
-  errorState: ErrorObject | null
+export interface ProcessDetailsState {
+  processDetails?: {
+    payload: ProcessDetails | null,
+    errorState: ErrorObject | null;
+  };
 }
 
-export const processDetailsReducer = (state: ProcessState, action: AppAction): ProcessState => {
+export const processDetailsReducer = (state: ProcessDetailsState, action: AppAction): ProcessDetailsState => {
   switch (action.type) {
     case "FETCH_ProcessDetails_SUCCESS":
-      return { ...state, processDetails: action.payload, errorState: null };
+      return { 
+        ...state, 
+        processDetails: {
+          payload: action.payload,
+          errorState: null
+        }
+      };
     case "FETCH_ProcessDetails_FAILURE":
-      return { ...state, processDetails: null, errorState: action.errorState };
+      console.log("ProcessDetailsReducer: Capturing error", action.errorState);
+      return { 
+        ...state, 
+        processDetails: {
+          payload: null,
+          errorState: action.errorState || { message: "Unknown error occurred" }
+        }
+      };
     default:
       return state;
   }

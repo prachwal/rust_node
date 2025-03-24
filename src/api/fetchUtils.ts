@@ -61,7 +61,7 @@ export async function fetchAndDispatch(
   }
 
   store.dispatch({ type: "setLoading", payload: true });
-  let errorMessage: string; // Deklarujemy zmienną na komunikat błędu
+  let errorMessage = "Unknown error"; // Default error message
 
   try {
     const response = await fetch(fullUrl, {
@@ -80,18 +80,26 @@ export async function fetchAndDispatch(
       throw new Error(`Failed to fetch data: ${response.statusText}`);
     }
     const data = await response.json();
-    store.dispatch({ type: successType, payload: data.payload, error: null });
+    store.dispatch({ 
+      type: successType, 
+      payload: data.payload, 
+      errorState: null 
+    });
   } catch (err) {
-    if (err instanceof Error) {
-      errorMessage = err.message; // Przypisujemy error.message do zmiennej
-    } else {
-      errorMessage = "Nieznany błąd"; // Domyślny komunikat dla nietypowych błędów
-    }
+    errorMessage = err instanceof Error ? err.message : String(err);
+    
     console.error(`Failed to fetch data for ${successType}:`, err);
+    
+    const errorObj = { 
+      message: `API Error: ${errorMessage}`, 
+      Error: err instanceof Error ? err : new Error(errorMessage) 
+    };
+    
+    // ONLY dispatch the failure action, not SET_ERROR 
     store.dispatch({
       type: failureType,
       payload: null,
-      errorState: { message: errorMessage, Error: err } as ErrorObject,
+      errorState: errorObj
     });
   } finally {
     store.dispatch({ type: "setLoading", payload: false });

@@ -9,21 +9,37 @@ import { processReducer } from "./processReducer";
 export interface AppState {
   count: number;
   loading: boolean;
-  errorState: ErrorObject | null;
-  processes: Process[] | null; // Add processes state
-  listeningPorts: ListeningPort[] | null; // Add listening ports state
+  processes: {
+    payload: Process[] | null,
+    errorState: ErrorObject | null;
+  }; // Add processes state
+  listeningPorts: {
+    payload: ListeningPort[] | null,
+    errorState: ErrorObject | null;
+  }; // Add listening ports state
   selectedPid?: string | null; // Add selectedPid to AppState
-  processDetails?: ProcessDetails | null; // Add processDetails to AppState
+  processDetails?: {
+    payload: ProcessDetails | null,
+    errorState: ErrorObject | null;
+  }; // Add processDetails to AppState
 }
 
 export const initialState: AppState = {
   count: 0,
   loading: false,
-  processes: [],
-  listeningPorts: [],
+  processes: {
+    payload: [],
+    errorState: null
+  },
+  listeningPorts: {
+    payload: [],
+    errorState: null
+  },
   selectedPid: null,
-  processDetails: null, // Ensure processDetails is initialized to null
-  errorState: { message: "", Error: undefined },
+  processDetails: {
+    payload: null,
+    errorState: null
+  }
 };
 
 export const appReducer = (state: AppState, action: AppAction): AppState => ({
@@ -31,21 +47,18 @@ export const appReducer = (state: AppState, action: AppAction): AppState => ({
   ...processReducer(
     {
       processes: state.processes,
-      selectedPid: state.selectedPid,
-      errorState: state.errorState
+      selectedPid: state.selectedPid
     },
     action
   ),
   ...processDetailsReducer(
     {
       processDetails: state.processDetails,
-      errorState: state.errorState
     },
     action
   ),
   ...portReducer({ 
       listeningPorts: state.listeningPorts, 
-      errorState: state.errorState 
     }, action),
   ...loadingReducer({ loading: state.loading }, action),
 });
