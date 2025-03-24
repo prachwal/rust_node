@@ -1,5 +1,3 @@
-import { AppAction } from "./actions";
-import { AppState } from "./reducer";
 
 export interface ErrorObject { 
   message: string;

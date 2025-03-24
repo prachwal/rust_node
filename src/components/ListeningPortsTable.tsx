@@ -21,7 +21,7 @@ export const ListeningPortsTable: React.FC = () => {
       <GenericTable
         columns={columns}
         caption="Listening Ports"
-        data={state.listeningPorts}
+        data={state.listeningPorts || []}
         tableClassName="listening-ports-table" // Pass the className as a prop
       />
     </ErrorBoundary>

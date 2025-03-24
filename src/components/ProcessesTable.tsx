@@ -30,7 +30,7 @@ export const ProcessesTable: React.FC = () => {
       <GenericTable
         columns={columns}
         caption="Processes"
-        data={state.processes}
+        data={state.processes || []}
         onRowClick={handleRowClick}
         tableClassName="listening-ports-table"
         rowProps={(row) => ({

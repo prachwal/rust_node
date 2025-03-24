@@ -9,9 +9,9 @@ import { processReducer } from "./processReducer";
 export interface AppState {
   count: number;
   loading: boolean;
-  errorState: ErrorObject;
-  processes: Process[]; // Add processes state
-  listeningPorts: ListeningPort[]; // Add listening ports state
+  errorState: ErrorObject | null;
+  processes: Process[] | null; // Add processes state
+  listeningPorts: ListeningPort[] | null; // Add listening ports state
   selectedPid?: string | null; // Add selectedPid to AppState
   processDetails?: ProcessDetails | null; // Add processDetails to AppState
 }
@@ -43,7 +43,10 @@ export const appReducer = (state: AppState, action: AppAction): AppState => ({
     },
     action
   ),
-  ...portReducer({ listeningPorts: state.listeningPorts }, action),
+  ...portReducer({ 
+      listeningPorts: state.listeningPorts, 
+      errorState: state.errorState 
+    }, action),
   ...loadingReducer({ loading: state.loading }, action),
 });
 
