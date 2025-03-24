@@ -21,6 +21,7 @@ const StateLoggerContent: React.FC = () => {
       return [...prevLog, entry];
     });
   }, []);
+  
 
   // Simplified subscriptions to reduce chances of errors
   useEffect(() => {
